@@ -27,7 +27,7 @@ echo "# -S    Log to syslog" >> $x
 echo "# -f    run in foreground" >> $x
 echo "DHCPD_OPTS=\"-S\"" >> $x
 sudo mv $x  /etc/default/udhcpd
-	#give the Pi a static IP address 
+        #give the Pi a static IP address
 sudo ifconfig wlan0 192.168.42.1
 #------------SETUP Station Interface for Rt5370-------------------------------------
 touch $x
@@ -46,9 +46,9 @@ echo "    wireless-power off" >> $x
 echo "" >> $x
 echo "iface default inet dhcp" >> $x
 sudo chown --reference=/etc/network/interfaces $x
-sudo chmod --reference==/etc/network/interfaces $x
+sudo chmod --reference=/etc/network/interfaces $x
 sudo mv $x /etc/network/interfaces
-sudo cp /etc/network/interfaces /etc/network/interfaces.sta 
+sudo cp /etc/network/interfaces /etc/network/interfaces.sta
 sudo chmod --reference /etc/network/interfaces.bk /etc/network/interfaces.sta
 #------------------------------SETUP AP Interface for Rt5370-------------------------------
 touch  $x
@@ -66,7 +66,7 @@ echo "    wireless-power off" >> $x
 echo "" >> $x
 echo "iface default inet dhcp" >> $x
 echo "up iptables-restore < /etc/iptables.ipv4.nat" >> $x
-sudo chmod --reference==/etc/network/interfaces $x
+sudo chmod --reference=/etc/network/interfaces $x
 sudo chown --reference=/etc/network/interfaces $x
 sudo mv $x  /etc/network/interfaces.ap
 sudo chmod --reference /etc/network/interfaces.bk /etc/network/interfaces.ap
@@ -105,7 +105,7 @@ echo "DAEMON_CONF=\"/etc/hostapd/hostapd.conf\"" >> $x
 sudo mv $x /etc/default/hostapd
 
 touch $x
-sudo sh -c "echo 1 >> /proc/sys/net/ipv4/ip_forward"
+sudo /bin/su -c "echo 'net.ipv4.ip_forward = 1' >> /etc/sysctl.conf"
 sudo echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
 sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 sudo iptables -A FORWARD -i eth0 -o wlan0 -m state --state RELATED,ESTABLISHED -j ACCEPT
